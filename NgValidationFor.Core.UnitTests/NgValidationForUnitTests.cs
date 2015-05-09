@@ -20,7 +20,7 @@ namespace NgValidationFor.UnitTests
         {
             var result = NgValidationFor<DummyModel>.GetAttributes(x => x.RequiredField);
 
-            Assert.IsNull(result);
+            Assert.AreEqual("ng-required", result);
         }
     }
 }

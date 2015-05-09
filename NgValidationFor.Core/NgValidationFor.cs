@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -35,6 +36,8 @@ namespace NgValidationFor.Core
             if (propInfo == null)
                 throw new ArgumentException(string.Format("Expression '{0}' refers to a field, not a property.",
                     propertyExpression));
+            //PropertyDescriptorCollection props2 = TypeDescriptor.GetProperties(propertyExpression.Body);
+
 
             //if (type != propInfo.ReflectedType &&
             //    !type.IsSubclassOf(propInfo.ReflectedType))
@@ -42,7 +45,21 @@ namespace NgValidationFor.Core
             //        string.Format("Expresion '{0}' refers to a property that is not from type {1}.", propertyExpression,
             //            type));
 
-            var validationAttributes = propInfo.CustomAttributes.Where(x => x.AttributeType == typeof(ValidationAttribute));
+            var validationAttributes = propInfo
+                .CustomAttributes.Where(x =>
+                {
+                    var currentAttr = x.AttributeType;
+                    while (currentAttr.BaseType != null)
+                    {
+                        currentAttr = currentAttr.BaseType;
+                        if (currentAttr == typeof(ValidationAttribute))
+                            return true;
+
+                    }
+                    return false;
+                });
+
+            // Convert .NET validation attributes to the strings that represent angular validation directive attributes
             var ngAttributes = validationAttributes.Select(x =>
             {
                 if (x.AttributeType == typeof (RequiredAttribute))
@@ -53,13 +70,9 @@ namespace NgValidationFor.Core
             })
             .Where(x => !string.IsNullOrEmpty(x));
 
+            // Return a string of the attributes to render
             var ngAttributesString = string.Join(" ", ngAttributes);
             return ngAttributesString;
-
-            //return propInfo;
-
-            //var annotations = expression.Body.Member.CustomAttributes;
-
         }
     }
 }
