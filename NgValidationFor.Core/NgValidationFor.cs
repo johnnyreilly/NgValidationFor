@@ -8,10 +8,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NgValidationFor.Core
 {
-    public static class NgValidationFor<TModel>
+    public static class NgValidationFor//<TModel>
     {
-        public static string GetAttributes<TProperty>(
-            Expression<Func<TModel, TProperty>> propertyExpression)
+        public static string GetAttributes<TModel, TProperty>(
+            this TModel model,
+            Expression<Func<TModel, TProperty>> propertyExpression) where TModel : class
         {
             // Return to native if true not passed
             //if (!useNativeUnobtrusiveAttributes)
@@ -64,7 +65,7 @@ namespace NgValidationFor.Core
             {
                 if (x.AttributeType == typeof (RequiredAttribute))
                 {
-                    return "ng-required";
+                    return "required=\"required\"";
                 }
                 return null;
             })

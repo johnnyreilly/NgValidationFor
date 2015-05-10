@@ -16,11 +16,13 @@ namespace NgValidationFor.UnitTests
     public class NgValidationForUnitTests
     {
         [TestMethod]
-        public void NgValidationFor_GetAttributes_returns_null()
+        public void NgValidationFor_GetAttributes_returns_required()
         {
-            var result = NgValidationFor<DummyModel>.GetAttributes(x => x.RequiredField);
+            var dummyModel = new DummyModel{ RequiredField = "JKS"};
 
-            Assert.AreEqual("ng-required", result);
+            var result = NgValidationFor.Core.NgValidationFor.GetAttributes(dummyModel, x => x.RequiredField);
+            
+            Assert.AreEqual("required=\"required\"", result);
         }
     }
 }
