@@ -1,0 +1,20 @@
+version: 1.0.{build}
+  
+# scripts to run before build
+before_build:
+- cmd: >-
+    nuget restore NgValidationFor.sln
+
+    npm install -g bower
+    
+    npm install -g gulp
+
+branches:
+  only:
+    - master
+
+install:
+- ps: choco install wget
+
+build:
+  verbosity: minimal
