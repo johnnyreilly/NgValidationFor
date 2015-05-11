@@ -1,6 +1,5 @@
 ﻿@using NgValidationFor.Core
-@using NgValidationFor.Documentation.Models
-@model RequiredDemoModel
+@model NgValidationFor.Documentation.Models.RequiredDemoModel
 @{
     ViewBag.Title = "Required";
     //@Html.TextBoxFor()
@@ -18,8 +17,7 @@
         <label>
             User name:
             <input type="text" name="userName" ng-model="user.name"
-                   @*Html.Raw(NgValidationFor.GetAttributes(Model, x => Model.RequiredField))*@
-                   @Html.Raw(Model.GetAttributes(x => Model.RequiredField))>
+                   @Html.Raw(Model.NgValidationFor(x => x.RequiredField))>
         </label>
         <div role="alert">
             <span class="error" ng-show="myForm.userName.$error.required">
