@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace NgValidationFor.Core.Directives
 {
-    public interface IDirective
+    public interface IDirectiveMapper
     {
         Type Annotation { get; }
         Func<CustomAttributeData, string> MapperFunction { get; }

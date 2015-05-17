@@ -4,19 +4,25 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using NgValidationFor.Core.Directives;
 
 namespace NgValidationFor.Core
 {
     public class NgValidationApi
     {
-        readonly Dictionary<Type, Func<CustomAttributeData, string>> _validationMappers;
+        readonly List<IDirectiveMapper> _directiveMappers;
 
         public NgValidationApi()
         {
-            _validationMappers = new Dictionary<Type, Func<CustomAttributeData, string>>
-            {
-                {typeof (RequiredAttribute), customAttributeData => "required=\"required\""}
-            };
+            // Scan assembly for directive mappers
+            var directiveMappers = Assembly.GetExecutingAssembly()
+                .GetTypes().Where(t => !t.IsAbstract && !t.IsInterface && typeof(IDirectiveMapper).IsAssignableFrom(t))
+                .Select(x => (IDirectiveMapper)Activator.CreateInstance(x));
+
+            _directiveMappers = new List<IDirectiveMapper>(directiveMappers);
+            //{
+            //new RequiredDirective()
+            //};
         }
 
         public string NgValidationFor<TModel, TProperty>(
@@ -34,23 +40,20 @@ namespace NgValidationFor.Core
                     propertyExpression));
 
             var validationAttributes = propInfo
-                .CustomAttributes.Where(x =>
-                {
-                    var currentAttr = x.AttributeType;
-                    while (currentAttr.BaseType != null)
-                    {
-                        currentAttr = currentAttr.BaseType;
-                        if (currentAttr == typeof(ValidationAttribute))
-                            return true;
-                    }
-                    return false;
-                });
+                .CustomAttributes
+                .Where(x => x.AttributeType.BaseType != null && x.AttributeType.BaseType.IsAssignableFrom(typeof(ValidationAttribute)));
 
             // Convert .NET validation attributes to the strings that represent angular validation directive attributes
             var ngAttributes = validationAttributes
-                .Select(customAttributeData => (_validationMappers.ContainsKey(customAttributeData.AttributeType))
-                    ? _validationMappers[customAttributeData.AttributeType](customAttributeData)
-                    : null)
+                .Select(customAttributeData =>
+                {
+                    var directiveMapper =
+                        _directiveMappers.FirstOrDefault(x => x.Annotation == customAttributeData.AttributeType);
+
+                    return (directiveMapper != null)
+                        ? directiveMapper.MapperFunction(customAttributeData)
+                        : null;
+                })
                 .Where(x => !string.IsNullOrEmpty(x));
 
             // Return a string of the attributes to render
