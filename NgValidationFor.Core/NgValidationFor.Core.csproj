@@ -36,6 +36,9 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Directives\IDirective.cs" />
+    <Compile Include="Directives\RequiredDirective.cs" />
+    <Compile Include="NgValidationApi.cs" />
     <Compile Include="NgValidationForHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
