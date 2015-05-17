@@ -11,11 +11,17 @@ namespace NgValidationFor.UnitTests
         [Required]
         public string RequiredField { get; set; }
 
-        [StringLength(5)]
+        [MaxLength(9)]
         public string NgMaxLengthField { get; set; }
 
+        [MinLength(3)]
+        public string NgMinLengthField { get; set; }
+
+        [StringLength(5)]
+        public string NgMaxStringLengthField { get; set; }
+
         [StringLength(7, MinimumLength = 3)]
-        public string NgMaxAndMinLengthField { get; set; }
+        public string NgMaxAndMinStringLengthField { get; set; }
     }
 
     [TestClass]
@@ -32,11 +38,31 @@ namespace NgValidationFor.UnitTests
         }
 
         [TestMethod]
-        public void Given_StringLengthAttribute_with_max_length_NgValidationFor_returns_ng_maxlength()
+        public void Given_MaxLengthAttribute_with_max_length_NgValidationFor_returns_ng_maxlength()
         {
-            var dummyModel = new DummyModel { NgMaxLengthField = "JKS" };
+            var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
 
             var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxLengthField);
+
+            Assert.AreEqual("ng-maxlength=\"9\"", result);
+        }
+
+        [TestMethod]
+        public void Given_MinLengthAttribute_with_max_length_NgValidationFor_returns_ng_minlength()
+        {
+            var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
+
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMinLengthField);
+
+            Assert.AreEqual("ng-minlength=\"3\"", result);
+        }
+
+        [TestMethod]
+        public void Given_StringLengthAttribute_with_max_length_NgValidationFor_returns_ng_maxlength()
+        {
+            var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
+
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxStringLengthField);
 
             Assert.AreEqual("ng-maxlength=\"5\"", result);
         }
@@ -44,9 +70,9 @@ namespace NgValidationFor.UnitTests
         [TestMethod]
         public void Given_StringLengthAttribute_with_max_length_and_with_max_length_NgValidationFor_returns_ng_maxlength_and_ng_minlength()
         {
-            var dummyModel = new DummyModel { NgMaxAndMinLengthField = "JKS" };
+            var dummyModel = new DummyModel { NgMaxAndMinStringLengthField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxAndMinLengthField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxAndMinStringLengthField);
 
             Assert.IsTrue(result.Contains("ng-maxlength=\"7\""));
             Assert.IsTrue(result.Contains("ng-minlength=\"3\""));
