@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Directives\DirectiveMapperBase.cs" />
     <Compile Include="Directives\IDirectiveMapper.cs" />
+    <Compile Include="Directives\StringLengthDirectiveMapper.cs" />
     <Compile Include="Directives\RequiredDirectiveMapper.cs" />
     <Compile Include="NgValidationApi.cs" />
     <Compile Include="NgValidationForHelper.cs" />
