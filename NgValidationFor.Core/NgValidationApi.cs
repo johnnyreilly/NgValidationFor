@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Web;
 using NgValidationFor.Core.Directives;
 
 namespace NgValidationFor.Core
@@ -25,7 +26,7 @@ namespace NgValidationFor.Core
             //};
         }
 
-        public string NgValidationFor<TModel, TProperty>(
+        public IHtmlString NgValidationFor<TModel, TProperty>(
             TModel model,
             Expression<Func<TModel, TProperty>> propertyExpression) where TModel : class
         {
@@ -57,7 +58,7 @@ namespace NgValidationFor.Core
                 .Where(x => !string.IsNullOrEmpty(x));
 
             // Return a string of the attributes to render
-            var ngAttributesString = string.Join(" ", ngAttributes);
+            var ngAttributesString = new HtmlString(string.Join(" ", ngAttributes));
             return ngAttributesString;
         }
     }

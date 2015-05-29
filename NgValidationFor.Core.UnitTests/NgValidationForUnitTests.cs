@@ -32,7 +32,7 @@ namespace NgValidationFor.UnitTests
         {
             var dummyModel = new DummyModel { RequiredField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.RequiredField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.RequiredField).ToHtmlString();
 
             Assert.AreEqual("required=\"required\"", result);
         }
@@ -42,7 +42,7 @@ namespace NgValidationFor.UnitTests
         {
             var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxLengthField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxLengthField).ToHtmlString();
 
             Assert.AreEqual("ng-maxlength=\"9\"", result);
         }
@@ -52,7 +52,7 @@ namespace NgValidationFor.UnitTests
         {
             var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMinLengthField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMinLengthField).ToHtmlString();
 
             Assert.AreEqual("ng-minlength=\"3\"", result);
         }
@@ -62,7 +62,7 @@ namespace NgValidationFor.UnitTests
         {
             var dummyModel = new DummyModel { NgMaxStringLengthField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxStringLengthField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxStringLengthField).ToHtmlString();
 
             Assert.AreEqual("ng-maxlength=\"5\"", result);
         }
@@ -72,7 +72,7 @@ namespace NgValidationFor.UnitTests
         {
             var dummyModel = new DummyModel { NgMaxAndMinStringLengthField = "JKS" };
 
-            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxAndMinStringLengthField);
+            var result = NgValidationFor.Core.NgValidationForHelper.NgValidationFor(dummyModel, x => x.NgMaxAndMinStringLengthField).ToHtmlString();
 
             Assert.IsTrue(result.Contains("ng-maxlength=\"7\""));
             Assert.IsTrue(result.Contains("ng-minlength=\"3\""));

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 
 namespace NgValidationFor.Core
 {
@@ -21,7 +22,7 @@ namespace NgValidationFor.Core
             _ngValidationApi = new NgValidationApi();
         }
 
-        public static string NgValidationFor<TModel, TProperty>(
+        public static IHtmlString NgValidationFor<TModel, TProperty>(
             this TModel model,
             Expression<Func<TModel, TProperty>> propertyExpression) where TModel : class
         {
